@@ -22,4 +22,15 @@ defmodule Worker do
     result
   end
 
+  def exec_con do
+    IO.puts("===== 並行実行開始 =====")
+    result = 1 .. 100
+      |> Enum.map(fn(_) -> random() end)
+      |> Enum.map(fn(t) -> Task.async(Worker, :sleep, [t]) end)
+      |> Enum.map(fn(d) -> Task.await(d) end)
+
+    IO.puts("===== 並行実行結果 =====")
+    result
+  end
+
 end
